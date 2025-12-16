@@ -36,10 +36,33 @@ function App() {
     console.log(cart);
   }, [cart]);
 
+  function updateQuantity(id, quantity) {
+  setCart(
+    cart.map(item =>
+      item.id === id
+        ? { ...item, quantity: Number(quantity) }
+        : item
+    )
+  );
+}
+
+function removeFromCart(id) {
+  setCart(cart.filter(item => item.id !== id));
+}
+
+
+function numberOfItems(){
+  let counter = 0;
+  cart.forEach(item => {
+    counter += item.quantity
+  })
+  return counter;
+}
+
   return (
     <Router>
       <div className="App">
-        <Nav />
+        <Nav numberOfItems={numberOfItems()}/>
 
         <Routes>
           <Route path="/"  element={<Home />} />
@@ -51,7 +74,7 @@ function App() {
 
            <Route
             path="/cart"
-            element={<Cart books={books} />}
+            element={<Cart books={books} cart={cart} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />}
           /> 
         </Routes>
 
